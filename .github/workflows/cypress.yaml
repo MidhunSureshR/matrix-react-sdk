@@ -166,7 +166,7 @@ jobs:
                   record: true
                   parallel: false
                   # command: npx knapsack-pro-cypress --config trashAssetsBeforeRuns=false --browser chrome
-                  command: find . -type f -name "*.spec.ts"
+                  command: find cypress -type f -name "*.spec.ts"
                   ci-build-id: ${{ needs.prepare.outputs.uuid }}-${{ matrix.crypto }}
                   #   spec: cypress/e2e/[${{ matrix.segment }}]*/**
               env:
