@@ -165,7 +165,8 @@ jobs:
                   wait-on: "http://localhost:8080"
                   record: true
                   parallel: false
-                  command: npx knapsack-pro-cypress --config trashAssetsBeforeRuns=false --browser chrome
+                  # command: npx knapsack-pro-cypress --config trashAssetsBeforeRuns=false --browser chrome
+                  command: find . -type f -name "*.spec.ts"
                   ci-build-id: ${{ needs.prepare.outputs.uuid }}-${{ matrix.crypto }}
                   #   spec: cypress/e2e/[${{ matrix.segment }}]*/**
               env:
