@@ -162,6 +162,7 @@ jobs:
               uses: iFaxity/wait-on-action@v1.1.0
               with:
                   resource: http://localhost:8080
+                  verbose: true
 
             - name: Run Cypress Tests
               env:
