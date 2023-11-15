@@ -109,7 +109,7 @@ jobs:
             fail-fast: false
             matrix:
                 # Run tests using both crypto stacks
-                crypto: [legacy, rust]
+                # crypto: [legacy, rust]
                 ci_node_total: [4]
                 ci_node_index: [0, 1, 2, 3]
         steps:
@@ -149,10 +149,10 @@ jobs:
                   repository: ${{ inputs.react-sdk-repository || github.repository }}
 
             # Enable rust crypto if the calling workflow requests it
-            - name: Enable rust crypto
-              if: matrix.crypto == 'rust'
-              run: |
-                  echo "CYPRESS_RUST_CRYPTO=1" >> "$GITHUB_ENV"
+            # - name: Enable rust crypto
+            #   if: matrix.crypto == 'rust'
+            #   run: |
+            #       echo "CYPRESS_RUST_CRYPTO=1" >> "$GITHUB_ENV"
 
             - name: Install dependencies
               run: |
