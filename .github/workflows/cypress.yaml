@@ -156,13 +156,13 @@ jobs:
 
             - name: Run element app locally
               run: |
-                   npx serve -p 8080 -L ../webapp &
+                   npx serve -p 8080 -L ../webapp & npx wait-on http://localhost:3000
 
-            - name: Wait for server to start
-              uses: iFaxity/wait-on-action@v1.1.0
-              with:
-                  resource: http://127.0.0.1:8080
-                  verbose: true
+            # - name: Wait for server to start
+            #   uses: iFaxity/wait-on-action@v1.1.0
+            #   with:
+            #       resource: http://127.0.0.1:8080
+            #       verbose: true
 
             - name: Run Cypress Tests
               env:
