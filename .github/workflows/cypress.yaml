@@ -159,7 +159,7 @@ jobs:
                    npx serve -p 8080 -L ../webapp
 
             - name: Wait for server to start
-              uses: iFaxity/wait-on-action
+              uses: iFaxity/wait-on-action@v1.1.0
               with:
                   resource: http://localhost:8080
 
