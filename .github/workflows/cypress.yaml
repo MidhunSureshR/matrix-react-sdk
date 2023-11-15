@@ -157,9 +157,9 @@ jobs:
             - name: Store knapsack token in env
               run: |
                    if [[ ${{ matrix.crypto == 'rust' }} ]]; then
-                      echo "KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS=${{secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS_RUST}}" >> $GITHUB_ENV
+                      echo "KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS=${{secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS_RUST}}" >> "$GITHUB_ENV"
                    else
-                      echo "KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS=${{secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS}} >> $GITHUB_ENV
+                      echo "KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS=${{secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS}}" >> "$GITHUB_ENV"
                    fi
 
             - name: Install dependencies
