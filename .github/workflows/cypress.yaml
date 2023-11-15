@@ -109,7 +109,7 @@ jobs:
             fail-fast: false
             matrix:
                 # Run tests using both crypto stacks
-                # crypto: [legacy, rust]
+                crypto: [legacy, rust]
                 ci_node_total: [4]
                 ci_node_index: [0, 1, 2, 3]
         steps:
@@ -149,10 +149,18 @@ jobs:
                   repository: ${{ inputs.react-sdk-repository || github.repository }}
 
             # Enable rust crypto if the calling workflow requests it
-            # - name: Enable rust crypto
-            #   if: matrix.crypto == 'rust'
-            #   run: |
-            #       echo "CYPRESS_RUST_CRYPTO=1" >> "$GITHUB_ENV"
+            - name: Enable rust crypto
+              if: matrix.crypto == 'rust'
+              run: |
+                  echo "CYPRESS_RUST_CRYPTO=1" >> "$GITHUB_ENV"
+
+            - name: Store knapsack token in env
+              run: |
+                   if [[ ${{ matrix.crypto == 'rust' }} ]]; then
+                      echo "KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS=${{secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS_RUST}}" >> $GITHUB_ENV
+                   else
+                      echo "KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS=${{secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS}} >> $GITHUB_ENV
+                   fi
 
             - name: Install dependencies
               run: |
@@ -171,7 +179,7 @@ jobs:
 
             - name: Run Cypress Tests
               env:
-                  KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS: ${{ secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS }}
+                  #   KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS: ${{ secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS }}
                   KNAPSACK_PRO_CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
                   KNAPSACK_PRO_CI_NODE_INDEX: ${{ matrix.ci_node_index }}
                   KNAPSACK_PRO_TEST_FILE_PATTERN: cypress/e2e/**/*.spec.ts
