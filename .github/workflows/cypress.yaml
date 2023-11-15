@@ -176,7 +176,7 @@ jobs:
                   KNAPSACK_PRO_CI_NODE_INDEX: ${{ matrix.ci_node_index }}
                   KNAPSACK_PRO_TEST_FILE_PATTERN: cypress/e2e/**/*.spec.ts
               run: |
-                  npx knapsack-pro-cypress --config trashAssetsBeforeRuns=false
+                  npx --package=@knapsack-pro/cypress knapsack-pro-cypress --config trashAssetsBeforeRuns=false
 
             # - name: Run Cypress tests via knapsack pro
             #   uses: cypress-io/github-action@ebe8b24c4428922d0f793a5c4c96853a633180e3 # v6.6.0
