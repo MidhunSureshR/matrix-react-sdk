@@ -155,6 +155,7 @@ jobs:
                   echo "CYPRESS_RUST_CRYPTO=1" >> "$GITHUB_ENV"
 
             - name: Run element app locally
+              shell: bash
               run: |
                   npx serve -p 8080 -L ../webapp & npx wait-on http://127.0.0.1:8080
 
