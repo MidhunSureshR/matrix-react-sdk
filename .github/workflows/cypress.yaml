@@ -154,13 +154,13 @@ jobs:
               run: |
                   echo "CYPRESS_RUST_CRYPTO=1" >> "$GITHUB_ENV"
 
-            - name: Store knapsack token in env
-              run: |
-                   if [[ ${{ matrix.crypto == 'rust' }} ]]; then
-                      echo "KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS=${{secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS_RUST}}" >> "$GITHUB_ENV"
-                   else
-                      echo "KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS=${{secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS}}" >> "$GITHUB_ENV"
-                   fi
+            # - name: Store knapsack token in env
+            #   run: |
+            #        if [[ ${{ matrix.crypto == 'rust' }} ]]; then
+            #           echo "KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS=${{secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS_RUST}}" >> "$GITHUB_ENV"
+            #        else
+            #           echo "KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS=${{secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS}}" >> "$GITHUB_ENV"
+            #        fi
 
             - name: Install dependencies
               run: |
@@ -180,6 +180,7 @@ jobs:
             - name: Run Cypress Tests
               env:
                   #   KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS: ${{ secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS }}
+                  KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS: ${{ matrix.crypto == 'rust' && secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS_RUST || secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS }}
                   KNAPSACK_PRO_CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
                   KNAPSACK_PRO_CI_NODE_INDEX: ${{ matrix.ci_node_index }}
                   KNAPSACK_PRO_TEST_FILE_PATTERN: cypress/e2e/**/*.spec.ts
