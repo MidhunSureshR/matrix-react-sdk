@@ -156,7 +156,7 @@ jobs:
 
             - name: Run element app locally
               run: |
-                   npx serve -p 8080 -L ../webapp
+                   npx serve -p 8080 -L ../webapp &
 
             - name: Wait for server to start
               uses: iFaxity/wait-on-action@v1.1.0
