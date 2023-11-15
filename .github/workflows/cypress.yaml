@@ -154,48 +154,65 @@ jobs:
               run: |
                   echo "CYPRESS_RUST_CRYPTO=1" >> "$GITHUB_ENV"
 
-            - name: Run Cypress tests via knapsack pro
-              uses: cypress-io/github-action@ebe8b24c4428922d0f793a5c4c96853a633180e3 # v6.6.0
+            - name: Run element app locally
+              run: |
+                   npx serve -p 8080 -L ../webapp
+
+            - name: Wait for server to start
+              uses: iFaxity/wait-on-action
               with:
-                  working-directory: matrix-react-sdk
-                  # The built-in Electron runner seems to grind to a halt trying to run the tests, so use chrome.
-                  browser: ${{ steps.setup-chrome.outputs.chrome-path }}
-                  headed: true
-                  start: npx serve -p 8080 -L ../webapp
-                  wait-on: "http://localhost:8080"
-                  record: true
-                  parallel: false
-                  # command: npx knapsack-pro-cypress --config trashAssetsBeforeRuns=false --browser chrome
-                  command: tree
-                  ci-build-id: ${{ needs.prepare.outputs.uuid }}-${{ matrix.crypto }}
-                  #   spec: cypress/e2e/[${{ matrix.segment }}]*/**
-              env:
-                  # Knapsack token and config
+                  resource: http://localhost:8080
+            
+            -name: Run Cypress Tests
+                env:
                   KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS: ${{ secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS }}
                   KNAPSACK_PRO_CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
                   KNAPSACK_PRO_CI_NODE_INDEX: ${{ matrix.ci_node_index }}
                   KNAPSACK_PRO_TEST_FILE_PATTERN: cypress/e2e/**/*.spec.ts
-                  # pass the Dashboard record key as an environment variable
-                  CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+                run: |
+                     npx knapsack-pro-cypress --config trashAssetsBeforeRuns=false
 
-                  # Use existing chromium rather than downloading another
-                  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+            # - name: Run Cypress tests via knapsack pro
+            #   uses: cypress-io/github-action@ebe8b24c4428922d0f793a5c4c96853a633180e3 # v6.6.0
+            #   with:
+            #       working-directory: matrix-react-sdk
+            #       # The built-in Electron runner seems to grind to a halt trying to run the tests, so use chrome.
+            #       browser: ${{ steps.setup-chrome.outputs.chrome-path }}
+            #       headed: true
+            #       start: npx serve -p 8080 -L ../webapp
+            #       wait-on: "http://localhost:8080"
+            #       record: true
+            #       parallel: false
+            #       command: npx knapsack-pro-cypress --config trashAssetsBeforeRuns=false --browser chrome
+            #       ci-build-id: ${{ needs.prepare.outputs.uuid }}-${{ matrix.crypto }}
+            #       #   spec: cypress/e2e/[${{ matrix.segment }}]*/**
+            #   env:
+            #       # Knapsack token and config
+            #       KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS: ${{ secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS }}
+            #       KNAPSACK_PRO_CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
+            #       KNAPSACK_PRO_CI_NODE_INDEX: ${{ matrix.ci_node_index }}
+            #       KNAPSACK_PRO_TEST_FILE_PATTERN: cypress/e2e/**/*.spec.ts
+            #       # pass the Dashboard record key as an environment variable
+            #       CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 
-                  # pass GitHub token to allow accurately detecting a build vs a re-run build
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            #       # Use existing chromium rather than downloading another
+            #       PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
 
-                  # make Node's os.tmpdir() return something where we actually have permissions
-                  TMPDIR: ${{ runner.temp }}
+            #       # pass GitHub token to allow accurately detecting a build vs a re-run build
+            #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-                  # tell Cypress more details about the context of this run
-                  COMMIT_INFO_BRANCH: ${{ github.event.workflow_run.head_branch }}
-                  COMMIT_INFO_SHA: ${{ github.event.workflow_run.head_sha }}
-                  COMMIT_INFO_REMOTE: ${{ github.repositoryUrl }}
-                  COMMIT_INFO_MESSAGE: ${{ needs.prepare.outputs.commit_message }}
-                  COMMIT_INFO_AUTHOR: ${{ needs.prepare.outputs.commit_author }}
-                  COMMIT_INFO_EMAIL: ${{ needs.prepare.outputs.commit_email }}
-                  CYPRESS_PULL_REQUEST_ID: ${{ needs.prepare.outputs.pr_id }}
-                  CYPRESS_PULL_REQUEST_URL: https://github.com/${{ github.repository }}/pull/${{ needs.prepare.outputs.pr_id }}
+            #       # make Node's os.tmpdir() return something where we actually have permissions
+            #       TMPDIR: ${{ runner.temp }}
+
+            #       # tell Cypress more details about the context of this run
+            #       COMMIT_INFO_BRANCH: ${{ github.event.workflow_run.head_branch }}
+            #       COMMIT_INFO_SHA: ${{ github.event.workflow_run.head_sha }}
+            #       COMMIT_INFO_REMOTE: ${{ github.repositoryUrl }}
+            #       COMMIT_INFO_MESSAGE: ${{ needs.prepare.outputs.commit_message }}
+            #       COMMIT_INFO_AUTHOR: ${{ needs.prepare.outputs.commit_author }}
+            #       COMMIT_INFO_EMAIL: ${{ needs.prepare.outputs.commit_email }}
+            #       CYPRESS_PULL_REQUEST_ID: ${{ needs.prepare.outputs.pr_id }}
+            #       CYPRESS_PULL_REQUEST_URL: https://github.com/${{ github.repository }}/pull/${{ needs.prepare.outputs.pr_id }}
 
             - name: 📤 Upload results artifact
               if: failure()
