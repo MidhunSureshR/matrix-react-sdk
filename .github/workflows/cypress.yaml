@@ -156,12 +156,12 @@ jobs:
 
             - name: Install dependencies
               run: |
-                  yarn install
+                  cd matrix-react-sdk && yarn install
 
             - name: Run element app locally
               shell: bash
               run: |
-                  npx serve -p 8080 -L ./webapp & npx wait-on http://localhost:8080
+                  npx serve -p 8080 -L ../webapp & npx wait-on http://localhost:8080
 
             # - name: Wait for server to start
             #   uses: iFaxity/wait-on-action@v1.1.0
@@ -176,7 +176,7 @@ jobs:
                   KNAPSACK_PRO_CI_NODE_INDEX: ${{ matrix.ci_node_index }}
                   KNAPSACK_PRO_TEST_FILE_PATTERN: cypress/e2e/**/*.spec.ts
               run: |
-                   cd matrix-react-sdk && yarn knapsack-pro-cypress --config trashAssetsBeforeRuns=false
+                   npx --package=@knapsack-pro/cypress knapsack-pro-cypress --config trashAssetsBeforeRuns=false
 
             # - name: Run Cypress tests via knapsack pro
             #   uses: cypress-io/github-action@ebe8b24c4428922d0f793a5c4c96853a633180e3 # v6.6.0
