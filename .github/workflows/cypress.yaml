@@ -174,9 +174,9 @@ jobs:
                   KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS: ${{ secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS }}
                   KNAPSACK_PRO_CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
                   KNAPSACK_PRO_CI_NODE_INDEX: ${{ matrix.ci_node_index }}
-                  KNAPSACK_PRO_TEST_FILE_PATTERN: matrix-react-sdk/cypress/e2e/**/*.spec.ts
+                  KNAPSACK_PRO_TEST_FILE_PATTERN: cypress/e2e/**/*.spec.ts
               run: |
-                   npx --package=@knapsack-pro/cypress knapsack-pro-cypress --config trashAssetsBeforeRuns=false
+                   cd matrix-react-sdk && npx --package=@knapsack-pro/cypress knapsack-pro-cypress --config trashAssetsBeforeRuns=false
 
             # - name: Run Cypress tests via knapsack pro
             #   uses: cypress-io/github-action@ebe8b24c4428922d0f793a5c4c96853a633180e3 # v6.6.0
