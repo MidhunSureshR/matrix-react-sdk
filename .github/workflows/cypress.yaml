@@ -156,7 +156,7 @@ jobs:
 
             - name: Install dependencies
               run: |
-                  cd matrix-react-sdk && yarn install
+                  cd matrix-react-sdk && yarn install && tree .
 
             - name: Run element app locally
               shell: bash
